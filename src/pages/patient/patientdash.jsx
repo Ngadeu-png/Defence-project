@@ -1,9 +1,8 @@
 import React from "react";
-import PatientInfoCard from "./patient/appointment";
-import BookAppointmentForm from "./patient/appointment";
-import ConsultationJoin from "./patient/consultation";
-import HealthRecords from "./patient/health record";
-
+import PatientInfoCard from "./appointment";
+import BookAppointmentForm from "./appointment";
+import ConsultationJoin from "./consultation";
+import HealthRecords from "./health record";
 
 const PatientDashboard = () => {
   return (
@@ -11,7 +10,6 @@ const PatientDashboard = () => {
       <BookAppointmentForm />
       <ConsultationJoin />
       <HealthRecords />
-      
     </div>
   );
 };

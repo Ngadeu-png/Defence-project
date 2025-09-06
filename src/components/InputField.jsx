@@ -1,4 +1,11 @@
-const InputField = ({ label, type, name, value, onChange, placeholder }) => {
+const InputField = ({
+  label = "",
+  type,
+  name,
+  value,
+  onChange,
+  placeholder,
+}) => {
   return (
     <div className="mb-4">
       <label className="block text-sm font-medium text-purple-900 mb-1">

@@ -13,20 +13,18 @@ const Register = () => {
     dob: "",
     phone: "",
   });
-
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: "" })); // Clear field error on change
+    setErrors((prev) => ({ ...prev, [name]: "" })); 
     setSuccess("");
   };
-
+  
   const validateFields = () => {
     const newErrors = {};
-
     if (!formData.username) newErrors.username = "Username is required.";
     if (!formData.email) newErrors.email = "Email is required.";
     else if (!/\S+@\S+\.\S+/.test(formData.email))
@@ -51,7 +49,7 @@ const Register = () => {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/signup", {
+      const res = await fetch("http://localhost:3000/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -74,7 +72,7 @@ const Register = () => {
         phone: "",
       });
     } catch (err) {
-      setErrors({ general: "Server error. Please try again later." });
+      setErrors({ general: "error Please try again later." });
     }
   };
 

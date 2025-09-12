@@ -1,20 +1,21 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { motion } from "framer-motion";
 import InputField from "../../components/InputField";
 import Button from "../../components/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../api/context/AuthContext";
 
-const Login = ({ onSubmit }) => {
+const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({}); // store validation errors
-
+  const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const { setUser } = useContext(AuthContext);
   const validate = () => {
     let tempErrors = {};
-
     // email validation
     if (!formData.email) {
       tempErrors.email = "Email cannot be empty";
@@ -33,10 +34,38 @@ const Login = ({ onSubmit }) => {
     return Object.keys(tempErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
-      onSubmit(formData);
+
+    try {
+      const res = await fetch("http://localhost:5000/api/auths/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setErrors({ general: data.error || "Something went wrong." });
+        return;
+      }
+      setUser(data.data);
+      localStorage.setItem("user", JSON.stringify(data.data));
+
+      if (data.data.role === "patient") {
+        navigate("/patient");
+      } else if (data.data.role === "admin") {
+        navigate("/admin");
+      }
+      setSuccess("User created successfully!");
+      // setFormData({
+      //   email: "",
+      //   password: "",
+      // });
+    } catch (err) {
+      console.log("error: ", err);
+      setErrors({ general: "error Please try again later." });
     }
   };
 

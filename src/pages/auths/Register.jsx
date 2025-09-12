@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import InputField from "../../components/InputField";
 import Button from "../../components/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -12,17 +12,18 @@ const Register = () => {
     confirmPassword: "",
     dob: "",
     phone: "",
+    role: "patient",
   });
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState("");
-
+  const navigate = useNavigate();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: "" })); 
+    setErrors((prev) => ({ ...prev, [name]: "" }));
     setSuccess("");
   };
-  
+
   const validateFields = () => {
     const newErrors = {};
     if (!formData.username) newErrors.username = "Username is required.";
@@ -49,7 +50,7 @@ const Register = () => {
     }
 
     try {
-      const res = await fetch("http://localhost:3000/api/signup", {
+      const res = await fetch("http://localhost:5000/api/auths/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -71,7 +72,9 @@ const Register = () => {
         dob: "",
         phone: "",
       });
+      navigate("/auths/login");
     } catch (err) {
+      console.log("error: ", err);
       setErrors({ general: "error Please try again later." });
     }
   };

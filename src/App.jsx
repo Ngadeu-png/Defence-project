@@ -1,12 +1,15 @@
-import { router } from './routes/router'
-import { RouterProvider } from 'react-router-dom'
+import AuthProvider from "./api/context/AuthContext";
+import { router } from "./routes/router";
+import { RouterProvider } from "react-router-dom";
 
 function App() {
   return (
     <>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

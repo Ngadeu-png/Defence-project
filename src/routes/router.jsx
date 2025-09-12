@@ -6,7 +6,6 @@ import {
 
 // import application layouts and pages
 import App_Layout from "../routes/app_layout";
-// auths imports
 import Login from "../pages/auths/Login";
 import Register from "../pages/auths/Register";
 import LandingPage from "../pages/LandingPage";
@@ -21,6 +20,12 @@ import PatientLayout from "../layout/PatientLayout";
 import AdminLayout from "../layout/AdminLayout";
 import Consultation from "../pages/admin/Consultation";
 import DoctorForm from "../pages/admin/DoctorForm";
+import Myrecord from "../pages/patient/Myrecord";
+import DoctorAppoint from "../pages/doctor/DoctorAppoint";
+import DoctorLayout from "../layout/DoctorLayout";
+//import Patientrecord from "../pages/doctor/Patientrecord";
+// import Startconsultion from "../pages/doctor/Startconsultation";
+
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -39,14 +44,23 @@ export const router = createBrowserRouter(
         <Route index element={<Overview />} />
         <Route path="appointment" element={<BookAppointmentForm />} />
         <Route path="consultation" element={<ConsultationJoin />} />
+        <Route path="consultation" element={<ConsultationJoin />} />
+        <Route path="Myrecord" element={<Myrecord />} />
       </Route>
 
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Overview />} />
         <Route path="appointment" element={<Adminpage />} />
         <Route path="Consultation" element={<Consultation />} />
-        <Route path="DoctorForm" element={<DoctorForm />} />
-        
+        <Route path="DoctorForm" element={< DoctorForm/>} />
+      </Route>
+   <Route path="/doctor" element={<DoctorLayout />}>
+        <Route index element={<Overview />} />
+        <Route path="DoctorAppoint" element={<DoctorAppoint />} />
+        <Route path=":doctorId/appointments" element={<DoctorAppoint />} />
+
+        {/* <Route path="Patientrecord" element={<Patientrecord />} /> */}
+        {/* <Route path="Startconsultation" element={<Startconsultation />} /> */}
       </Route>
     </Route>
   )

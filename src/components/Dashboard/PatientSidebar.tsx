@@ -52,7 +52,7 @@ const PatientSidebard = () => {
             )}
           </NavLink>
 
-          <NavLink to="/admin/dashboard">
+          <NavLink to="/patient/Myrecord">
             {({ isActive }) => (
               <li
                 className={`flex items-center gap-4 hover:bg-white hover:text-black cursor-pointer p-3 ${

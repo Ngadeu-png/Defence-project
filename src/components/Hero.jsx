@@ -5,7 +5,7 @@ const Hero = () => {
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-100 via-white to-pink-100 px-6 relative overflow-hidden"
+      className="min-h-screen flex items-center justify-center bg-gradient- from-purple-100 via-white to-pink-100 px-6 relative overflow-hidden"
     >
       <motion.div
         className="text-center max-w-3xl z-10"
@@ -20,7 +20,7 @@ const Hero = () => {
           Your smart, secure electronic medical record system. Empowering
           patients. Enabling providers.
         </p>
-
+       
         <motion.div
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}

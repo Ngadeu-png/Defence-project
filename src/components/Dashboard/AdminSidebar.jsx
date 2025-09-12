@@ -5,7 +5,7 @@ import { Link, NavLink } from "react-router-dom";
 
 const AdminSidebard = () => {
   return (
-    <aside className="w-52 h-[100vh] fixed bg-blue-400 ">
+    <aside className="w-52 h-[100vh] fixed bg-purple-400 ">
       <div className="px-4">
         <div className="text-3xl text-white font-bold mb-8 pt-4">ADMIN</div>
         <ul className="text-white space-y-4">

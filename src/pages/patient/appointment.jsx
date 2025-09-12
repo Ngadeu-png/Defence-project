@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Select from "react-select";
 import InputField from "../../components/InputField";
 import Button from "../../components/Button";
+import { AuthContext } from "../../api/context/AuthContext";
 
 const specialties = [
   { value: "generalist", label: "Generalist" },
@@ -11,6 +12,7 @@ const specialties = [
 ];
 
 const BookAppointmentForm = () => {
+  const { user } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -18,14 +20,43 @@ const BookAppointmentForm = () => {
     reason: "",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Appointment booked with: " + JSON.stringify(formData, null, 2));
+    setLoading(true);
+    setMessage("");
+
+    const newBody = {
+      ...formData,
+      userId: user?._id ?? "",
+    };
+
+    try {
+      const response = await fetch("http://localhost:5000/api/appointments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newBody),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage("Appointment booked successfully!");
+        setFormData({ name: "", age: "", specialty: "", reason: "" });
+      } else {
+        setMessage(" Error: " + (data.error || "Failed to book"));
+      }
+    } catch (error) {
+      setMessage("Network error: " + error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -46,6 +77,7 @@ const BookAppointmentForm = () => {
             value={formData.name}
             onChange={handleChange}
             placeholder="Enter full name"
+            required
           />
 
           <InputField
@@ -55,6 +87,7 @@ const BookAppointmentForm = () => {
             value={formData.age}
             onChange={handleChange}
             placeholder="Enter your age"
+            required
           />
 
           <div className="md:col-span-2">
@@ -64,6 +97,7 @@ const BookAppointmentForm = () => {
             <Select
               options={specialties}
               placeholder="Select Specialty"
+              value={specialties.find((s) => s.value === formData.specialty)}
               onChange={(option) =>
                 setFormData((prev) => ({ ...prev, specialty: option.value }))
               }
@@ -77,15 +111,26 @@ const BookAppointmentForm = () => {
             </label>
             <textarea
               name="reason"
-              id=""
+              value={formData.reason}
+              onChange={handleChange}
               className="w-full px-4 py-2 rounded-md bg-white/70 text-gray-900 placeholder-gray-500 border border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400"
               placeholder="Reason for appointment"
-            ></textarea>
+              required
+            />
           </div>
         </div>
 
-        <div className="mt-8">
-          <Button text="Book Appointment" type="submit" />
+        {/* Submit button */}
+        <div className="mt-8 flex flex-col items-center">
+          <Button
+            text={loading ? "Booking..." : "Book Appointment"}
+            type="submit"
+          />
+          {message && (
+            <p className="mt-4 text-sm font-medium text-center text-purple-800">
+              {message}
+            </p>
+          )}
         </div>
       </form>
     </div>

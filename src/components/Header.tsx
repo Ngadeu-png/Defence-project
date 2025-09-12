@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import InputField from "./InputField";
+import { AuthContext } from "../api/context/AuthContext";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const { user } = useContext(AuthContext);
+
   return (
     <div className="rounded-xl  flex justify-between items-center p-4 border-b border-b-purple-500">
       <InputField
@@ -19,8 +22,8 @@ const Header = () => {
           className="w-10 h-10 rounded-full object-cover"
         />
         <div className="flex flex-col space-y-1 text-xs">
-          <span className="font-bold">Totok Micheal</span>
-          <span>tmicheal20@gmail.com</span>
+          <span className="font-bold">{user?.username}</span>
+          <span>{user?.email}</span>
         </div>
       </div>
     </div>

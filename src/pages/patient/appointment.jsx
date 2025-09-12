@@ -19,6 +19,7 @@ const BookAppointmentForm = () => {
     specialty: "",
     reason: "",
   });
+  const token = localStorage.getItem("token");
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -38,9 +39,12 @@ const BookAppointmentForm = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/api/appointments", {
+      const response = await fetch("http://localhost:5000/api/appointments/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(newBody),
       });
 
@@ -90,7 +94,7 @@ const BookAppointmentForm = () => {
             required
           />
 
-          <div className="md:col-span-2">
+          {/* <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Specialty
             </label>
@@ -103,7 +107,7 @@ const BookAppointmentForm = () => {
               }
               className="rounded-xl"
             />
-          </div>
+          </div> */}
 
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-purple-900 mb-1">

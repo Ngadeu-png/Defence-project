@@ -50,13 +50,18 @@ const Login = () => {
         setErrors({ general: data.error || "Something went wrong." });
         return;
       }
+      console.log(data);
+
       setUser(data.data);
       localStorage.setItem("user", JSON.stringify(data.data));
+      localStorage.setItem("token", data.token);
 
       if (data.data.role === "patient") {
         navigate("/patient");
       } else if (data.data.role === "admin") {
         navigate("/admin");
+      } else if (data.data.role === "doctor") {
+        navigate("/doctor");
       }
       setSuccess("User created successfully!");
       // setFormData({

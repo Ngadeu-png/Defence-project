@@ -177,7 +177,7 @@ const Register = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.4 }}
         >
-          <Button text="Register" type="submit" />
+          <Button text="Register" type="submit" onClick={handleSubmit} />
         </motion.div>
       </motion.form>
     </div>

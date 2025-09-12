@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import InputField from "../../components/InputField";
 import Button from "../../components/Button";
 
-const API_URL = "http://localhost:5000/api/doctors"; 
+const API_URL = "http://localhost:5000/api/doctors";
 
 const DoctorForm = () => {
   const [doctors, setDoctors] = useState([]);
@@ -18,12 +18,20 @@ const DoctorForm = () => {
   const [editingDoctor, setEditingDoctor] = useState(null);
   const [success, setSuccess] = useState("");
 
+  const token = localStorage.getItem("token");
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const res = await fetch(API_URL);
+        const res = await fetch(`${API_URL}/get-doctors`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = await res.json();
-        setDoctors(data);
+        console.log(data, "helloooo");
+        setDoctors(data.doctors);
       } catch (err) {
         console.error("Error fetching doctors:", err);
       }
@@ -41,41 +49,59 @@ const DoctorForm = () => {
     e.preventDefault();
 
     try {
-      if (editingDoctor) {
-        // Update doctor
-        const res = await fetch(`${API_URL}/${editingDoctor._id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        });
-        const updatedDoctor = await res.json();
+      // if (editingDoctor) {
+      //   // Update doctor
+      //   const res = await fetch(`${API_URL}/${editingDoctor._id}`, {
+      //     method: "PUT",
+      //     headers: { "Content-Type": "application/json" },
+      //     body: JSON.stringify(formData),
+      //   });
+      //   const updatedDoctor = await res.json();
 
-        setDoctors((prev) =>
-          prev.map((doc) => (doc._id === updatedDoctor._id ? updatedDoctor : doc))
-        );
-        setSuccess("Doctor updated successfully!");
-      } else {
-        // Add new doctor
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        });
-        const newDoctor = await res.json();
+      //   setDoctors((prev) =>
+      //     prev.map((doc) => (doc._id === updatedDoctor._id ? updatedDoctor : doc))
+      //   );
+      //   setSuccess("Doctor updated successfully!");
+      // } else {
+      // Add new doctor
+      const token = localStorage.getItem("token");
+      console.log(token, "hellll");
+      const res = await fetch(`${API_URL}/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
+      console.log(formData, "hellooo");
+      const newDoctor = await res.json();
 
-        setDoctors((prev) => [...prev, newDoctor]);
-        setSuccess("Doctor added successfully!");
-      }
+      setDoctors((prev) => [...prev, newDoctor]);
+      setSuccess("Doctor added successfully!");
+      //}
 
-      setFormData({ name: "", specialty: "", email: "", phone: "", password: "" });
-      setEditingDoctor(null);
+      // setFormData({ name: "", specialty: "", email: "", phone: "", password: "" });
+      // setEditingDoctor(null);
     } catch (err) {
       console.error("Error saving doctor:", err);
       setSuccess("Error saving doctor!");
     }
   };
 
-  const handleEdit = (doctor) => {
+  const handleEdit = async (doctor) => {
+     const token = localStorage.getItem("token");
+
+      const res = await fetch(`${API_URL}/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
+      console.log(formData, "hellooo");
+      const newDoctor = await res.json();
     setEditingDoctor(doctor);
     setFormData(doctor);
   };
@@ -143,7 +169,7 @@ const DoctorForm = () => {
               onChange={handleChange}
               placeholder="Enter phone"
             />
-             <InputField
+            <InputField
               label="Password"
               type="password"
               name="password"
@@ -181,7 +207,7 @@ const DoctorForm = () => {
                 className="flex items-center justify-between bg-gray-50 rounded-lg p-3 shadow hover:shadow-md transition"
               >
                 <div>
-                  <p className="font-semibold text-gray-700">{doc.name}</p>
+                  <p className="font-semibold text-gray-700">{doc.username}</p>
                   <p className="text-xs text-gray-500">{doc.specialty}</p>
                 </div>
                 <Button

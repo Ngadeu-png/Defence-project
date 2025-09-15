@@ -1,14 +1,15 @@
 import React, { useContext, useState } from "react";
-import Select from "react-select";
 import InputField from "../../components/InputField";
 import Button from "../../components/Button";
+import Select from "react-select";
 import { AuthContext } from "../../api/context/AuthContext";
 
-const specialties = [
-  { value: "generalist", label: "Generalist" },
-  { value: "neurologist", label: "Neurologist" },
-  { value: "ophthalmologist", label: "Ophthalmologist" },
-  { value: "cardiology", label: "Cardiology" },
+const appointmentTypes = [
+  { value: "Outpatient", label: "Outpatient" },
+  { value: "InPatient", label: "InPatient" },
+  { value: "Emergency", label: "Emergency" },
+  { value: "Virtual", label: "Virtual" },
+  { value: "Preventive", label: "Preventive" },
 ];
 
 const BookAppointmentForm = () => {
@@ -16,8 +17,9 @@ const BookAppointmentForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     age: "",
-    specialty: "",
+    type: "",
     reason: "",
+    appointmentDate: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -27,14 +29,19 @@ const BookAppointmentForm = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
 
     const newBody = {
-      ...formData,
       userId: user?._id ?? "",
+      type: formData.type,
+      reason: formData.reason,
+      appointmentDate: formData.appointmentDate,
+      name: formData.name,
+      age: formData.age,
     };
 
     try {
@@ -43,14 +50,19 @@ const BookAppointmentForm = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newBody),
       });
-
       const data = await response.json();
 
       if (response.ok) {
         setMessage("Appointment booked successfully!");
-        setFormData({ name: "", age: "", specialty: "", reason: "" });
+        setFormData({
+          name: "",
+          age: "",
+          type: "Outpatient",
+          reason: "",
+          appointmentDate: "",
+        });
       } else {
-        setMessage(" Error: " + (data.error || "Failed to book"));
+        setMessage("Error: " + (data.error || "Failed to book"));
       }
     } catch (error) {
       setMessage("Network error: " + error.message);
@@ -92,20 +104,34 @@ const BookAppointmentForm = () => {
 
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Specialty
+              Appointment Type
             </label>
             <Select
-              options={specialties}
-              placeholder="Select Specialty"
-              value={specialties.find((s) => s.value === formData.specialty)}
+              options={appointmentTypes}
+              placeholder="Select Type"
+              value={appointmentTypes.find((t) => t.value === formData.type)}
               onChange={(option) =>
-                setFormData((prev) => ({ ...prev, specialty: option.value }))
+                setFormData((prev) => ({ ...prev, type: option.value }))
               }
               className="rounded-xl"
             />
           </div>
 
           <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Appointment Date & Time
+            </label>
+            <input
+              type="datetime-local"
+              name="appointmentDate"
+              value={formData.appointmentDate}
+              onChange={handleChange}
+              className="w-full px-4 py-2 rounded-md bg-white/70 text-gray-900 border border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400"
+              required
+            />
+          </div>
+
+          <div className="md-span-2">
             <label className="block text-sm font-medium text-purple-900 mb-1">
               Reason for appointment
             </label>
@@ -120,7 +146,6 @@ const BookAppointmentForm = () => {
           </div>
         </div>
 
-        {/* Submit button */}
         <div className="mt-8 flex flex-col items-center">
           <Button
             text={loading ? "Booking..." : "Book Appointment"}

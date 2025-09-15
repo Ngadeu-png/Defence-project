@@ -74,7 +74,7 @@ const DoctorForm = () => {
       setSuccess("Error saving doctor!");
     }
   };
-
+  
   const handleEdit = (doctor) => {
     setEditingDoctor(doctor);
     setFormData(doctor);

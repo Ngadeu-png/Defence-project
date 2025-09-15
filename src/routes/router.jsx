@@ -23,9 +23,12 @@ import DoctorForm from "../pages/admin/DoctorForm";
 import Myrecord from "../pages/patient/Myrecord";
 import DoctorAppoint from "../pages/doctor/DoctorAppoint";
 import DoctorLayout from "../layout/DoctorLayout";
+import Availability from "../pages/doctor/Availability";
 //import Patientrecord from "../pages/doctor/Patientrecord";
-// import Startconsultion from "../pages/doctor/Startconsultation";
-
+import Startconsultion from "../pages/doctor/Startconsultation";
+import Startconsultation from "../pages/doctor/Startconsultation";
+import Patientrecord from "../pages/doctor/Patientrecord";
+import Patient from "../pages/doctor/Patient";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -52,12 +55,16 @@ export const router = createBrowserRouter(
         <Route index element={<Overview />} />
         <Route path="appointment" element={<Adminpage />} />
         <Route path="Consultation" element={<Consultation />} />
-        <Route path="DoctorForm" element={< DoctorForm/>} />
+        <Route path="DoctorForm" element={<DoctorForm />} />
       </Route>
-   <Route path="/doctor" element={<DoctorLayout />}>
+      <Route path="/Doctor" element={<DoctorLayout />}>
         <Route index element={<Overview />} />
+        <Route path="Availability" element={<Availability />} />
         <Route path="DoctorAppoint" element={<DoctorAppoint />} />
         <Route path=":doctorId/appointments" element={<DoctorAppoint />} />
+        <Route path="Startconsultation" element={<Startconsultation />} />
+        <Route path="patients" element={<Patient />} />
+        <Route path="patients/patient/:patientId" element={<Patientrecord />} />
 
         {/* <Route path="Patientrecord" element={<Patientrecord />} /> */}
         {/* <Route path="Startconsultation" element={<Startconsultation />} /> */}

@@ -26,7 +26,7 @@ function DoctorAppoint() {
   }, []);
   return (
     <div>
-      <h1>Recent Appointment</h1>
+      <h1>Recent Appointment here!!</h1>
     </div>
   );
 }

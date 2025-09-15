@@ -140,7 +140,7 @@ const DoctorList = () => {
         setIsDoctorModalOpen(false);
 
         setTimeout(() => {
-          fetchAppointments(); // update UI rendering
+          fetchAppointments(); 
         }, 2000);
 
         navigate(`/admin/appointment`);
@@ -195,7 +195,6 @@ const DoctorList = () => {
         })}
       </div>
 
-      {/* Doctor Modal */}
       <DoctorModal
         isOpen={isDoctorModalOpen}
         onClose={() => setIsDoctorModalOpen(false)}

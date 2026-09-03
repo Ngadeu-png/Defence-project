@@ -24,11 +24,13 @@ import Myrecord from "../pages/patient/Myrecord";
 import DoctorAppoint from "../pages/doctor/DoctorAppoint";
 import DoctorLayout from "../layout/DoctorLayout";
 import Availability from "../pages/doctor/Availability";
+import PatientList from "../components/PatientList";
 //import Patientrecord from "../pages/doctor/Patientrecord";
 import Startconsultion from "../pages/doctor/Startconsultation";
 import Startconsultation from "../pages/doctor/Startconsultation";
 import Patientrecord from "../pages/doctor/Patientrecord";
 import Patient from "../pages/doctor/Patient";
+import DoctorOverview from "../pages/doctor/DoctorOverview";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -56,9 +58,10 @@ export const router = createBrowserRouter(
         <Route path="appointment" element={<Adminpage />} />
         <Route path="Consultation" element={<Consultation />} />
         <Route path="DoctorForm" element={<DoctorForm />} />
+        <Route path="patients" element={<PatientList />} />
       </Route>
       <Route path="/Doctor" element={<DoctorLayout />}>
-        <Route index element={<Overview />} />
+        <Route index element={<DoctorOverview />} />
         <Route path="Availability" element={<Availability />} />
         <Route path="DoctorAppoint" element={<DoctorAppoint />} />
         <Route path=":doctorId/appointments" element={<DoctorAppoint />} />

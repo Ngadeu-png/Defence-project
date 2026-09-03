@@ -14,7 +14,12 @@ export default function PatientList() {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/auths");
+        const token = localStorage.getItem("token");
+        const res = await fetch("http://localhost:5000/api/auths", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = await res.json();
         console.log("data:", data.data);
         setPatients(data.data || []);

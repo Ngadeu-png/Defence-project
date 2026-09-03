@@ -38,7 +38,12 @@ const PatientRecord = () => {
     const fetchRecords = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:5000/api/records/patient/${patientId}`);
+        const token = localStorage.getItem("token");
+        const res = await fetch(`http://localhost:5000/api/records/patient/${patientId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = await res.json();
         if (res.ok) setPatientRecords(data.data || []);
         else console.error("Fetch error:", data);
@@ -66,9 +71,13 @@ const PatientRecord = () => {
     const payload = { patient: patientId, doctor, appointment, noteType, subjective, objective, assessment, plan };
 
     try {
+      const token = localStorage.getItem("token");
       const res = await fetch("http://localhost:5000/api/records", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(payload),
       });
       const data = await res.json();

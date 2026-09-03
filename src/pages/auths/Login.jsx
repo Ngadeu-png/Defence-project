@@ -203,8 +203,14 @@ const Login = () => {
       localStorage.setItem("user", JSON.stringify(data.data));
       localStorage.setItem("token", data.token);
 
-      // Redirect to patient dashboard by default
-      navigate("/patient");
+      // Redirect based on user role
+      if (data.data.role === "patient") {
+        navigate("/patient");
+      } else if (data.data.role === "doctor") {
+        navigate("/Doctor");
+      } else if (data.data.role === "admin") {
+        navigate("/admin");
+      }
     } catch (err) {
       console.error(err);
       setErrors({ general: "Server error. Try again later." });

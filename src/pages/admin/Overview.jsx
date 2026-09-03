@@ -26,7 +26,12 @@ const DoctorModal = ({ isOpen, onClose, onSelectDoctor }) => {
 
     const fetchDoctors = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/doctors");
+        const token = localStorage.getItem("token");
+        const res = await fetch("http://localhost:5000/api/doctors", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = await res.json();
         setDoctors(data);
       } catch (err) {
@@ -100,7 +105,12 @@ const DoctorList = () => {
 
   const fetchAppointments = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/appointments");
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:5000/api/appointments", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await res.json();
       setAppointments(data);
     } catch (err) {

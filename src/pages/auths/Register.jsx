@@ -188,6 +188,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import InputField from "../../components/InputField";
+import SelectField from "../../components/SelectField";
 import Button from "../../components/Button";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -201,6 +202,8 @@ const Register = () => {
     confirmPassword: "",
     dob: "",
     phone: "",
+    role: "patient",
+    specialty: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -225,6 +228,8 @@ const Register = () => {
     if (!formData.dob.trim()) newErrors.dob = "Date of Birth is required";
     if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
     else if (!/^[6]\d{8}$/.test(formData.phone.trim()))  newErrors.phone = "Enter a valid number";
+    if (!formData.role) newErrors.role = "Role is required";
+    if (formData.role === "doctor" && !formData.specialty.trim()) newErrors.specialty = "Specialty is required for doctors";
     return newErrors;
   };
 
@@ -252,7 +257,7 @@ const Register = () => {
       }
 
       setSuccess("User created successfully!");
-      setFormData({ username: "", email: "", password: "", confirmPassword: "", dob: "", phone: "" });
+      setFormData({ username: "", email: "", password: "", confirmPassword: "", dob: "", phone: "", role: "patient", specialty: "" });
       navigate("/auths/login");
     } catch (err) {
       console.log(err);
@@ -352,6 +357,41 @@ const Register = () => {
             />
             {errors.phone && <p className="text-red-600 text-sm mt-1">{errors.phone}</p>}
           </div>
+
+          <div>
+            <SelectField
+              label="Role"
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              options={[
+                { value: "patient", label: "Patient" },
+                { value: "doctor", label: "Doctor" },
+              ]}
+            />
+            {errors.role && <p className="text-red-600 text-sm mt-1">{errors.role}</p>}
+          </div>
+
+          {formData.role === "doctor" && (
+            <div>
+              <SelectField
+                label="Specialty"
+                name="specialty"
+                value={formData.specialty}
+                onChange={handleChange}
+                options={[
+                  { value: "cardiology", label: "Cardiology" },
+                  { value: "neurology", label: "Neurology" },
+                  { value: "orthopedics", label: "Orthopedics" },
+                  { value: "dermatology", label: "Dermatology" },
+                  { value: "pediatrics", label: "Pediatrics" },
+                  { value: "psychiatry", label: "Psychiatry" },
+                  { value: "general", label: "General Practice" },
+                ]}
+              />
+              {errors.specialty && <p className="text-red-600 text-sm mt-1">{errors.specialty}</p>}
+            </div>
+          )}
 
           <div className="md:col-span-2 text-center text-purple-700 font-light text-sm">
             Already have an account?{" "}
